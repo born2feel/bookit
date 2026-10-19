@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bookit"
+version = "0.1.0"
+description = "Telegram bot for booking appointments with an admin panel (RU/EN)"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12"
+dependencies = [
+    "aiogram>=3.13,<4",
+    "sqlalchemy[asyncio]>=2.0.36,<2.1",
+    "alembic>=1.14,<2",
+    "pydantic-settings>=2.7,<3",
+    "aiosqlite>=0.20",
+    "asyncpg>=0.30",
+    "tzdata>=2024.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.8",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "N", "ASYNC", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# UI strings intentionally use Cyrillic and typographic symbols (➕, –, «»)
+"src/bookit/bot/i18n/*.py" = ["RUF001"]
+"src/bookit/bot/texts.py" = ["RUF001"]
+"tests/test_i18n.py" = ["RUF001"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["bookit"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
