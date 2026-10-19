@@ -1,19 +1,11 @@
 MESSAGES: dict[str, str] = {
     # --- formatting ---
-    "weekday.0": "Mon",
-    "weekday.1": "Tue",
-    "weekday.2": "Wed",
-    "weekday.3": "Thu",
-    "weekday.4": "Fri",
-    "weekday.5": "Sat",
-    "weekday.6": "Sun",
     "fmt.datetime": "{day} at {time}",
     "fmt.minutes": "{n} min",
     # --- commands ---
     "cmd.start": "Main menu",
     "cmd.help": "Help",
     "cmd.cancel": "Cancel current action",
-    "cmd.language": "Change language",
     # --- common ---
     "menu.welcome": (
         "👋 Welcome to <b>BookIt</b>!\n\nBook a service and manage your appointments here."
@@ -23,7 +15,6 @@ MESSAGES: dict[str, str] = {
         "📅 <b>Book</b> — choose a service, a date and a free time slot.\n"
         "📋 <b>My bookings</b> — your upcoming appointments; you can cancel them.\n\n"
         "/start — main menu\n"
-        "/language — change language\n"
         "/cancel — abort the current action\n"
         "/help — this help"
     ),
@@ -31,13 +22,10 @@ MESSAGES: dict[str, str] = {
     "menu.nothing_to_cancel": "Nothing to cancel.",
     "menu.unknown_input": "I didn't understand that 🤔 Please use the buttons or press /start.",
     "menu.stale_button": "This button has expired. Press /start to begin again.",
-    "language.choose": "Выберите язык / Choose language:",
-    "language.changed": "✅ Language switched to English.",
     # --- buttons ---
     "btn.book": "📅 Book",
     "btn.my_bookings": "📋 My bookings",
     "btn.admin": "⚙️ Admin panel",
-    "btn.language": "🌐 Language",
     "btn.to_menu": "🏠 Menu",
     "btn.to_main_menu": "🏠 Main menu",
     "btn.back_to_services": "⬅️ Services",
@@ -53,7 +41,7 @@ MESSAGES: dict[str, str] = {
     "btn.admin_days_off": "🌴 Days off",
     "btn.to_admin": "⬅️ Admin panel",
     "btn.add_service": "➕ Add service",
-    "btn.edit_price": "💰 Change price",
+    "btn.edit_price": "💲 Change price",
     "btn.edit_duration": "⏱ Change duration",
     "btn.hide_service": "🙈 Hide from catalog",
     "btn.show_service": "👁 Show in catalog",
@@ -69,9 +57,9 @@ MESSAGES: dict[str, str] = {
     "booking.no_slots": "No free time on {day}",
     "booking.slots": "Free time on {day}:",
     "booking.summary": (
-        "Please check your booking:\n\n🧾 {service}\n📅 {when}\n⏱ {duration}\n💰 {price}"
+        "Please check your booking:\n\n🧾 {service}\n📅 {when}\n⏱ {duration}\n💵 {price}"
     ),
-    "booking.created": ("✅ You're booked!\n\n{booking}\n\nYou can cancel it in «My bookings»."),
+    "booking.created": ('✅ You\'re booked!\n\n{booking}\n\nYou can cancel it in "My bookings".'),
     "my.empty": "You have no upcoming bookings.",
     "my.title": "<b>Your bookings:</b>",
     "my.ask_cancel": "Cancel this booking?\n\n{booking}",
@@ -88,9 +76,9 @@ MESSAGES: dict[str, str] = {
     "admin.services_empty": "No services yet. Add the first one!",
     "admin.ask_name": "Enter the service name (or /cancel to abort):",
     "admin.ask_duration": "Duration in minutes, e.g. 60:",
-    "admin.ask_price": "Price in rubles, e.g. 1500:",
+    "admin.ask_price": "Price in US dollars, e.g. 25 or 19.99:",
     "admin.service_added": "✅ Service added",
-    "admin.ask_new_price": "Enter the new price in rubles (or /cancel):",
+    "admin.ask_new_price": "Enter the new price in US dollars (or /cancel):",
     "admin.price_updated": "✅ Price updated",
     "admin.ask_new_duration": (
         "Enter the new duration in minutes (or /cancel).\nExisting bookings will not change."
@@ -104,8 +92,8 @@ MESSAGES: dict[str, str] = {
     "admin.days_off_title": "<b>Days off</b>",
     "admin.days_off_empty": "No days off planned.",
     "admin.day_off_removed": "✅ Day off removed.",
-    "admin.ask_day_off": "Enter the day off as DD.MM.YYYY (or /cancel):",
-    "admin.ask_reason": "Reason (optional). Send «{skip}» to skip:",
+    "admin.ask_day_off": "Enter the day off as MM/DD/YYYY (or /cancel):",
+    "admin.ask_reason": 'Reason (optional). Send "{skip}" to skip:',
     "admin.day_off_added": "✅ Day off added.",
     # --- notifications ---
     "notify.new_booking": "🆕 New booking\n{booking}\n👤 {client}",
@@ -133,12 +121,12 @@ MESSAGES: dict[str, str] = {
     "validation.bad_date": "Invalid date",
     "validation.duration_not_int": "Duration must be a whole number of minutes, e.g. 60",
     "validation.duration_range": "Duration must be between {min} and {max} minutes",
-    "validation.price_not_number": "Price must be a number, e.g. 1500 or 1499.90",
-    "validation.price_range": "Price must be between 0 and {max}",
+    "validation.price_not_number": "Price must be a number, e.g. 25 or 19.99",
+    "validation.price_range": "Price must be between $0 and ${max:,}",
     "validation.price_precision": "Price cannot have more than two decimal places",
     "validation.name_empty": "Name cannot be empty",
     "validation.name_too_long": "Name must be at most {max} characters long",
-    "validation.date_format": "Enter a valid date as DD.MM.YYYY, e.g. 31.12.2026",
+    "validation.date_format": "Enter a valid date as MM/DD/YYYY, e.g. 12/31/2026",
     "validation.day_off_in_past": "A day in the past cannot be made a day off",
     "validation.reason_too_long": "Reason must be at most {max} characters long",
 }

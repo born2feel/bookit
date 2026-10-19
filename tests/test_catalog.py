@@ -13,8 +13,9 @@ class TestParsing:
     @pytest.mark.parametrize(
         ("text", "expected"),
         [
-            ("1500", Decimal("1500.00")),
-            ("1 499,90 ₽", Decimal("1499.90")),
+            ("35", Decimal("35.00")),
+            ("$1,499.90", Decimal("1499.90")),
+            ("$ 19.99", Decimal("19.99")),
             ("0", Decimal("0.00")),
             (" 99.5 ", Decimal("99.50")),
         ],
@@ -48,16 +49,16 @@ class TestCatalogService:
     async def test_create_and_get(self, session: AsyncSession) -> None:
         catalog = CatalogService(session)
 
-        created = await catalog.create(" Haircut ", 60, Decimal("1500"))
+        created = await catalog.create(" Haircut ", 60, Decimal("35"))
         fetched = await catalog.get(created.id)
 
         assert fetched.name == "Haircut"
-        assert fetched.price == Decimal("1500.00")
+        assert fetched.price == Decimal("35.00")
         assert fetched.is_active
 
     async def test_create_validates_values(self, session: AsyncSession) -> None:
         with pytest.raises(ValidationError):
-            await CatalogService(session).create("Haircut", 1000, Decimal("1500"))
+            await CatalogService(session).create("Haircut", 1000, Decimal("35"))
 
     async def test_hidden_service_is_not_in_active_list(
         self, session: AsyncSession, haircut: Service, beard: Service
@@ -83,10 +84,10 @@ class TestCatalogService:
     async def test_update_price_and_duration(self, session: AsyncSession, haircut: Service) -> None:
         catalog = CatalogService(session)
 
-        await catalog.update_price(haircut.id, Decimal("1800"))
+        await catalog.update_price(haircut.id, Decimal("40"))
         updated = await catalog.update_duration(haircut.id, 45)
 
-        assert updated.price == Decimal("1800.00")
+        assert updated.price == Decimal("40.00")
         assert updated.duration_min == 45
 
     async def test_missing_service(self, session: AsyncSession) -> None:

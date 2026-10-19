@@ -18,7 +18,7 @@ class DbSettings(BaseSettings):
 class Settings(DbSettings):
     bot_token: SecretStr
     admin_ids: Annotated[frozenset[int], NoDecode] = frozenset()
-    timezone: str = "Europe/Moscow"
+    timezone: str = "America/New_York"
     work_start: time = time(10, 0)
     work_end: time = time(20, 0)
     slot_step_minutes: int = Field(default=30, ge=5, le=240)

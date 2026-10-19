@@ -116,7 +116,7 @@ def days_off_list(days_off: Sequence[DayOff], tr: Translator) -> InlineKeyboardM
     builder = InlineKeyboardBuilder()
     for day_off in days_off:
         builder.button(
-            text=tr("btn.remove_day_off", day=f"{day_off.day:%d.%m.%Y}"),
+            text=tr("btn.remove_day_off", day=f"{day_off.day:%m/%d/%Y}"),
             callback_data=DayOffCb(action=DayOffAction.REMOVE, day_off_id=day_off.id),
         )
     builder.button(text=tr("btn.add_day_off"), callback_data=DayOffCb(action=DayOffAction.ADD))

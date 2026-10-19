@@ -1,8 +1,8 @@
 class BookItError(Exception):
     """Base domain error.
 
-    The services layer knows nothing about the user's language: an error carries
-    a translation key and parameters, and the bot layer renders the text.
+    The services layer knows nothing about presentation: an error carries a
+    message key and parameters, and the bot layer renders the text.
     """
 
     key = "error.generic"

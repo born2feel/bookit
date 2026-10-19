@@ -13,14 +13,6 @@ class BookingStatus(StrEnum):
     CANCELLED = "cancelled"
 
 
-class Language(StrEnum):
-    RU = "ru"
-    EN = "en"
-
-
-DEFAULT_LANGUAGE = Language.RU
-
-
 def _str_enum(enum: type[StrEnum]) -> Enum:
     """Store the enum as VARCHAR rather than a native PostgreSQL type — easier migrations."""
     return Enum(
@@ -38,9 +30,6 @@ class User(Base):
     tg_id: Mapped[int] = mapped_column(BigInteger, unique=True)
     full_name: Mapped[str] = mapped_column(String(255))
     username: Mapped[str | None] = mapped_column(String(64))
-    language: Mapped[Language] = mapped_column(
-        _str_enum(Language), default=DEFAULT_LANGUAGE, server_default=DEFAULT_LANGUAGE.value
-    )
     created_at: Mapped[datetime] = mapped_column(UTCDateTime(), default=utcnow)
 
 

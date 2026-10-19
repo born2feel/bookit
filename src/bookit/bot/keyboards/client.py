@@ -11,7 +11,6 @@ from bookit.bot.callbacks import (
     DateCb,
     FlowAction,
     FlowCb,
-    LanguageCb,
     MenuAction,
     MenuCb,
     MyBookingAction,
@@ -19,28 +18,18 @@ from bookit.bot.callbacks import (
     ServiceCb,
     SlotCb,
 )
-from bookit.bot.i18n import LANGUAGE_NAMES, Translator
+from bookit.bot.i18n import Translator
 from bookit.bot.texts import service_button
-from bookit.db.models import Booking, Language, Service
+from bookit.db.models import Booking, Service
 
 
 def main_menu(tr: Translator, *, is_admin: bool) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(text=tr("btn.book"), callback_data=MenuCb(action=MenuAction.BOOK))
     builder.button(text=tr("btn.my_bookings"), callback_data=MenuCb(action=MenuAction.MY_BOOKINGS))
-    builder.button(text=tr("btn.language"), callback_data=MenuCb(action=MenuAction.LANGUAGE))
     if is_admin:
         builder.button(text=tr("btn.admin"), callback_data=AdminCb(section=AdminSection.MENU))
-    builder.adjust(2, 1, 1)
-    return builder.as_markup()
-
-
-def language_picker(current: Language) -> InlineKeyboardMarkup:
-    builder = InlineKeyboardBuilder()
-    for language, name in LANGUAGE_NAMES.items():
-        mark = "✓ " if language is current else ""
-        builder.button(text=f"{mark}{name}", callback_data=LanguageCb(language=language))
-    builder.adjust(2)
+    builder.adjust(2, 1)
     return builder.as_markup()
 
 

@@ -31,7 +31,8 @@ def validate_duration(value: int) -> int:
 
 
 def parse_price(text: str) -> Decimal:
-    normalized = text.strip().replace("₽", "").replace(" ", "").replace(",", ".")
+    # US format: "$1,499.90" -> "1499.90" (commas are thousands separators)
+    normalized = text.strip().replace("$", "").replace(",", "").replace(" ", "")
     try:
         value = Decimal(normalized)
     except InvalidOperation:

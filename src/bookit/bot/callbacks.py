@@ -2,22 +2,15 @@ from enum import StrEnum
 
 from aiogram.filters.callback_data import CallbackData
 
-from bookit.db.models import Language
-
 
 class MenuAction(StrEnum):
     MAIN = "main"
     BOOK = "book"
     MY_BOOKINGS = "my"
-    LANGUAGE = "lang"
 
 
 class MenuCb(CallbackData, prefix="menu"):
     action: MenuAction
-
-
-class LanguageCb(CallbackData, prefix="setlang"):
-    language: Language
 
 
 # --- client booking ---

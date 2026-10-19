@@ -27,21 +27,23 @@ class TestParseDate:
     @pytest.mark.parametrize(
         ("text", "expected"),
         [
-            ("31.12.2026", date(2026, 12, 31)),
-            ("01.11", date(2026, 11, 1)),
-            (" 5.1.2027 ", date(2027, 1, 5)),
+            ("12/31/2026", date(2026, 12, 31)),
+            ("11/01", date(2026, 11, 1)),
+            (" 1/5/2027 ", date(2027, 1, 5)),
         ],
     )
     def test_valid(self, text: str, expected: date) -> None:
         assert parse_date(text, TODAY) == expected
 
-    @pytest.mark.parametrize("text", ["2026-10-10", "32.01.2026", "29.02", "tomorrow", ""])
+    @pytest.mark.parametrize(
+        "text", ["2026-10-10", "31/12/2026", "13/01/2026", "02/29", "31.12.2026", "tomorrow", ""]
+    )
     def test_invalid(self, text: str) -> None:
         with pytest.raises(ValidationError):
             parse_date(text, TODAY)
 
     def test_leap_day_without_year(self) -> None:
-        assert parse_date("29.02", date(2028, 1, 10)) == date(2028, 2, 29)
+        assert parse_date("02/29", date(2028, 1, 10)) == date(2028, 2, 29)
 
 
 class TestDaysOff:

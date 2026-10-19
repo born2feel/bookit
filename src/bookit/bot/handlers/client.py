@@ -104,13 +104,15 @@ async def _show_slots(
     slots = await slot_service.free_slots(data["service_id"], day)
     if not slots:
         await state.set_state(BookingFlow.choosing_date)
-        await callback.answer(notice or tr("booking.no_slots", day=tr.day(day)), show_alert=True)
+        await callback.answer(
+            notice or tr("booking.no_slots", day=tr.long_day(day)), show_alert=True
+        )
         return
     await state.set_state(BookingFlow.choosing_slot)
     header = f"{notice}\n\n" if notice else ""
     await show(
         callback,
-        header + tr("booking.slots", day=tr.day(day)),
+        header + tr("booking.slots", day=tr.long_day(day)),
         kb.slots_picker(slots, schedule_cfg.tz, tr),
     )
 

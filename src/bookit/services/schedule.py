@@ -21,13 +21,13 @@ REASON_MAX_LENGTH = 255
 
 
 def parse_date(text: str, today: date) -> date:
-    """Parses "DD.MM.YYYY" or "DD.MM" (the current year is assumed)."""
+    """Parses US dates "MM/DD/YYYY" or "MM/DD" (the current year is assumed)."""
     value = text.strip()
-    if value.count(".") == 1:
-        # add the year before parsing, otherwise 29.02 fails (1900 is not a leap year)
-        value = f"{value}.{today.year}"
+    if value.count("/") == 1:
+        # add the year before parsing, otherwise 02/29 fails (1900 is not a leap year)
+        value = f"{value}/{today.year}"
     try:
-        return datetime.strptime(value, "%d.%m.%Y").date()
+        return datetime.strptime(value, "%m/%d/%Y").date()
     except ValueError:
         raise ValidationError("validation.date_format") from None
 

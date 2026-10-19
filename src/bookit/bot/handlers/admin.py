@@ -206,9 +206,9 @@ async def _show_day(
     header = f"{notice}\n\n" if notice else ""
     if bookings:
         lines = "\n".join(texts.admin_booking_line(b, schedule_cfg.tz, tr) for b in bookings)
-        body = f"{tr('admin.day_title', day=tr.day(day))}\n\n{lines}"
+        body = f"{tr('admin.day_title', day=tr.long_day(day))}\n\n{lines}"
     else:
-        body = tr("admin.day_empty", day=tr.day(day))
+        body = tr("admin.day_empty", day=tr.long_day(day))
     await show(callback, header + body, kb.day_bookings(bookings, day, schedule_cfg.tz, tr))
 
 

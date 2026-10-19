@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "bookit"
 version = "0.1.0"
-description = "Telegram bot for booking appointments with an admin panel (RU/EN)"
+description = "Telegram bot for booking appointments with an admin panel"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.12"
@@ -38,10 +38,9 @@ src = ["src", "tests"]
 select = ["E", "W", "F", "I", "B", "UP", "SIM", "N", "ASYNC", "RUF"]
 
 [tool.ruff.lint.per-file-ignores]
-# UI strings intentionally use Cyrillic and typographic symbols (➕, –, «»)
+# UI strings intentionally use typographic symbols (➕, –, —)
 "src/bookit/bot/i18n/*.py" = ["RUF001"]
 "src/bookit/bot/texts.py" = ["RUF001"]
-"tests/test_i18n.py" = ["RUF001"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["bookit"]

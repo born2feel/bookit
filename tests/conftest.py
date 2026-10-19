@@ -12,14 +12,14 @@ from bookit.db.base import Base
 from bookit.db.models import Service, User
 from bookit.services import CatalogService, UserService
 
-TZ = ZoneInfo("Europe/Moscow")
+TZ = ZoneInfo("America/New_York")
 TODAY = date(2026, 10, 19)  # Monday
-# 08:00 Moscow time — the working day has not started yet
+# 08:00 New York time — the working day has not started yet
 NOW = datetime.combine(TODAY, time(8, 0), tzinfo=TZ).astimezone(UTC)
 
 
 def at(day: date, hour: int, minute: int = 0) -> datetime:
-    """Local (Moscow) time → aware datetime."""
+    """Local (New York) time → aware datetime."""
     return datetime.combine(day, time(hour, minute), tzinfo=TZ)
 
 
@@ -70,9 +70,9 @@ async def other_user(session: AsyncSession) -> User:
 
 @pytest.fixture
 async def haircut(session: AsyncSession) -> Service:
-    return await CatalogService(session).create("Haircut", 60, Decimal("1500"))
+    return await CatalogService(session).create("Haircut", 60, Decimal("35"))
 
 
 @pytest.fixture
 async def beard(session: AsyncSession) -> Service:
-    return await CatalogService(session).create("Beard trim", 30, Decimal("700"))
+    return await CatalogService(session).create("Beard trim", 30, Decimal("15"))

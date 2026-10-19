@@ -1,29 +1,24 @@
-"""Dependency-free i18n: message dictionaries plus language-aware formatting."""
+"""User-facing texts: one message catalog plus US-style formatting.
+
+All strings live in `en.py`, so the handlers contain no hard-coded text and
+another language can be added later as one more catalog.
+"""
 
 from datetime import date, datetime
 from decimal import Decimal
 from functools import cache
 from zoneinfo import ZoneInfo
 
-from bookit.bot.i18n import en, ru
-from bookit.db.models import DEFAULT_LANGUAGE, Language
+from bookit.bot.i18n import en
 from bookit.services.exceptions import BookItError
 
-CATALOGS: dict[Language, dict[str, str]] = {
-    Language.RU: ru.MESSAGES,
-    Language.EN: en.MESSAGES,
-}
-
-LANGUAGE_NAMES: dict[Language, str] = {
-    Language.RU: "🇷🇺 Русский",
-    Language.EN: "🇬🇧 English",
-}
+WEEKDAYS = ("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
 
 class Translator:
-    def __init__(self, language: Language) -> None:
-        self.language = language
-        self._messages = CATALOGS[language]
+    def __init__(self, messages: dict[str, str]) -> None:
+        self._messages = messages
 
     def __call__(self, key: str, /, **params: object) -> str:
         return self._messages[key].format(**params)
@@ -31,32 +26,45 @@ class Translator:
     def error(self, exc: BookItError) -> str:
         return self(exc.key, **exc.params)
 
-    def day(self, value: date) -> str:
-        return f"{value:%d.%m} ({self(f'weekday.{value.weekday()}')})"
+    @staticmethod
+    def day(value: date) -> str:
+        """Compact date for buttons: "Wed 10/21"."""
+        return f"{WEEKDAYS[value.weekday()]} {value.month}/{value.day}"
 
-    def full_day(self, value: date) -> str:
-        return f"{value:%d.%m.%Y} ({self(f'weekday.{value.weekday()}')})"
+    @staticmethod
+    def long_day(value: date) -> str:
+        """Date in text: "Wed, Oct 21"."""
+        return f"{WEEKDAYS[value.weekday()]}, {MONTHS[value.month - 1]} {value.day}"
+
+    @classmethod
+    def full_day(cls, value: date) -> str:
+        """Date with year: "Wed, Oct 21, 2026"."""
+        return f"{cls.long_day(value)}, {value.year}"
 
     @staticmethod
     def hhmm(moment: datetime, tz: ZoneInfo) -> str:
-        return f"{moment.astimezone(tz):%H:%M}"
+        """12-hour clock: "3:30 PM" (built manually to stay locale-independent)."""
+        local = moment.astimezone(tz)
+        hour = local.hour % 12 or 12
+        suffix = "AM" if local.hour < 12 else "PM"
+        return f"{hour}:{local.minute:02d} {suffix}"
 
     def moment(self, moment: datetime, tz: ZoneInfo) -> str:
+        """Date and time: "Wed, Oct 21 at 3:30 PM"."""
         local = moment.astimezone(tz)
-        return self("fmt.datetime", day=self.day(local.date()), time=f"{local:%H:%M}")
+        return self("fmt.datetime", day=self.long_day(local.date()), time=self.hhmm(local, tz))
 
     def minutes(self, value: int) -> str:
         return self("fmt.minutes", n=value)
 
     @staticmethod
     def price(value: Decimal) -> str:
+        """US dollars: "$1,500" or "$19.99"."""
         if value == value.to_integral_value():
-            text = f"{int(value):,}".replace(",", " ")
-        else:
-            text = f"{value:,.2f}".replace(",", " ").replace(".", ",")
-        return f"{text} ₽"
+            return f"${int(value):,}"
+        return f"${value:,.2f}"
 
 
 @cache
-def get_translator(language: Language = DEFAULT_LANGUAGE) -> Translator:
-    return Translator(language)
+def get_translator() -> Translator:
+    return Translator(en.MESSAGES)

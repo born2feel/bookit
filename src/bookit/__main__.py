@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import logging
 
 from aiogram import Bot, Dispatcher
@@ -11,25 +12,17 @@ from bookit.bot.handlers import build_root_router
 from bookit.bot.i18n import get_translator
 from bookit.bot.middlewares import ServicesMiddleware
 from bookit.config import Settings
-from bookit.db.models import DEFAULT_LANGUAGE, Language
 from bookit.db.session import create_engine, create_sessionmaker
 from bookit.logging_setup import setup_logging
 
 logger = logging.getLogger("bookit")
 
-COMMAND_NAMES = ("start", "language", "help", "cancel")
+COMMAND_NAMES = ("start", "help", "cancel")
 
 
-def bot_commands(language: Language) -> list[BotCommand]:
-    tr = get_translator(language)
+def bot_commands() -> list[BotCommand]:
+    tr = get_translator()
     return [BotCommand(command=name, description=tr(f"cmd.{name}")) for name in COMMAND_NAMES]
-
-
-async def set_commands(bot: Bot) -> None:
-    """Telegram shows the command menu in the language of the user's client."""
-    await bot.set_my_commands(bot_commands(DEFAULT_LANGUAGE))
-    for language in Language:
-        await bot.set_my_commands(bot_commands(language), language_code=language.value)
 
 
 async def main() -> None:
@@ -52,7 +45,7 @@ async def main() -> None:
         logger.warning("ADMIN_IDS is not set — the admin panel will be unavailable")
 
     try:
-        await set_commands(bot)
+        await bot.set_my_commands(bot_commands())
         logger.info("Bot started")
         await dp.start_polling(
             bot,
@@ -66,7 +59,9 @@ async def main() -> None:
 
 
 def run() -> None:
-    asyncio.run(main())
+    # Ctrl+C is a normal way to stop the bot — no traceback needed
+    with contextlib.suppress(KeyboardInterrupt):
+        asyncio.run(main())
 
 
 if __name__ == "__main__":
