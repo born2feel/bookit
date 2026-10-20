@@ -12,11 +12,11 @@ requires-python = ">=3.12"
 dependencies = [
     "aiogram>=3.13,<4",
     "sqlalchemy[asyncio]>=2.0.36,<2.1",
-    "alembic>=1.14,<2",
-    "pydantic-settings>=2.7,<3",
-    "aiosqlite>=0.20",
+    "alembic>=1.20,<2",
+    "pydantic-settings>=2.16,<3",
+    "aiosqlite>=0.22.1",
     "asyncpg>=0.30",
-    "tzdata>=2024.1",
+    "tzdata>=2026.5",
 ]
 
 [project.optional-dependencies]
